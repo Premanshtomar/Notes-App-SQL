@@ -1,7 +1,10 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 // import 'package:untitled1/Views/show_dialogs.dart';
-import 'package:untitled1/services/auth/auth_services.dart';
+import 'package:untitled1/services/auth/bloc/auth_bloc.dart';
+import 'package:untitled1/services/auth/bloc/auth_bloc_events.dart';
 
 class EmailVerification extends StatefulWidget {
   const EmailVerification({Key? key}) : super(key: key);
@@ -16,23 +19,27 @@ class _EmailVerificationState extends State<EmailVerification> {
     // return
     return Scaffold(
         appBar: AppBar(title: const Text('Email verify')),
-        body:Column(
+        body: Column(
           children: [
-            const Text("we've sent you a verification mail Please check your mail!! "),
+            const Text(
+                "we've sent you a verification mail Please check your mail!! "),
             TextButton(
-                onPressed: () async {
-                  await AuthServices.firebase().sendEmailVerification();
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const SendVerificationMailEvent(),
+                      );
                 },
                 child: const Text('Click Here')),
             const Text("If you didn't received verification email."
                 "Click button above to Send verification mail again"),
-
-            const Text("Once you verify your email click button bellow to login!"),
-            TextButton(onPressed: () async{
-                await AuthServices.firebase().logOut();
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
-            },
+            const Text(
+                "Once you verify your email click button bellow to login!"),
+            TextButton(
+                onPressed: () async {
+                  context.read<AuthBloc>().add(
+                    const LogOutEvent(),
+                  );
+                },
                 child: const Text('Login'))
           ],
         ));

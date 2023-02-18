@@ -4,12 +4,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled1/Views/notes/displaying_notes.dart';
 import 'package:untitled1/enum/menu_action.dart';
 import 'package:untitled1/services/auth/auth_services.dart';
+import 'package:untitled1/services/auth/bloc/auth_bloc.dart';
+import 'package:untitled1/services/auth/bloc/auth_bloc_events.dart';
 import 'package:untitled1/services/crud/notes_services.dart';
 import 'package:untitled1/utils/gradients/gradient_widget.dart';
-import 'package:untitled1/utils/show_dialogs.dart';
+import 'package:untitled1/utils/dialog/show_dialogs.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);
@@ -100,10 +103,8 @@ class _NotesState extends State<Notes> {
                     case MenuAction.logout:
                       final shouldLogout = await showLogOutDialog(context);
                       if (shouldLogout) {
-                        AuthServices.firebase().logOut();
                         // ignore: use_build_context_synchronously
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            "/login/", (route) => false);
+                        context.read<AuthBloc>().add(const LogOutEvent());
                       }
                   }
                 },

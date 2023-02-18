@@ -4,7 +4,7 @@ import 'package:untitled1/utils/gradients/gradient_widget.dart';
 
 import '../../services/crud/notes_services.dart';
 import '../../utils/gradients/linear_gradient.dart';
-import '../../utils/show_dialogs.dart';
+import '../../utils/dialog/show_dialogs.dart';
 
 typedef NoteCallBack = void Function(DataBaseNote note);
 
